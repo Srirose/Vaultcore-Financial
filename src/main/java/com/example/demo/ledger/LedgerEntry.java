@@ -1,7 +1,6 @@
 package com.example.demo.ledger;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,24 +11,40 @@ public class LedgerEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "transaction_id", nullable = false)
     private String transactionId;
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "entry_type", nullable = false)
     private EntryType entryType;
 
-    @Column(nullable = false, precision = 15, scale = 2)
-    private BigDecimal amount;
+    @Column(nullable = false)
+    private Double amount;
 
-    @Column(nullable = false, precision = 15, scale = 2)
-    private BigDecimal balanceAfter;
+    @Column(name = "balance_after", nullable = false)
+    private Double balanceAfter;
 
-    @Column(updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // getters only (no setters for immutability)
+    // getters & setters
+    public Long getId() { return id; }
+    public String getTransactionId() { return transactionId; }
+    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public EntryType getEntryType() { return entryType; }
+    public void setEntryType(EntryType entryType) { this.entryType = entryType; }
+
+    public Double getAmount() { return amount; }
+    public void setAmount(Double amount) { this.amount = amount; }
+
+    public Double getBalanceAfter() { return balanceAfter; }
+    public void setBalanceAfter(Double balanceAfter) { this.balanceAfter = balanceAfter; }
 }
+
