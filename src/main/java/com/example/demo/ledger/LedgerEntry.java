@@ -29,6 +29,8 @@ public class LedgerEntry {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Enumerated(EnumType.STRING)
 
     // getters & setters
     public Long getId() { return id; }

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.dto.BalanceResponse;
 import com.example.demo.service.BalanceService;
 
+import org.springframework.http.MediaType;
+
 @RestController
 @RequestMapping("/api/balance")
 public class BalanceController {
@@ -16,15 +18,18 @@ public class BalanceController {
         this.balanceService = balanceService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<BalanceResponse> getBalance(
-            @PathVariable Long userId) {
+    @GetMapping(
+            value = "/{userId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+        )
+        public ResponseEntity<BalanceResponse> getBalance(
+                @PathVariable Long userId) {
 
-        Double balance = balanceService.getBalance(userId);
+            Double balance = balanceService.getBalance(userId);
 
-        return ResponseEntity.<BalanceResponse>ok(
-                new BalanceResponse(userId, balance)
-        );
+            return ResponseEntity.ok(
+                    new BalanceResponse(userId, balance)
+            );
 
     }
 }

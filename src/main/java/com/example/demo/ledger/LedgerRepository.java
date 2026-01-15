@@ -14,9 +14,9 @@ public interface LedgerRepository extends JpaRepository<LedgerEntry, Long> {
 		        FROM LedgerEntry le
 		        WHERE le.userId = :userId
 		        ORDER BY le.createdAt DESC
-		        LIMIT 1
+		        
 		    """)
-		    Optional<Double> findLastBalance(Long userId);
+		    Optional<Double> findLastBalance(@Param("userId")Long userId);
 
 		    // ✅ Transaction history
 		    @Query("""
