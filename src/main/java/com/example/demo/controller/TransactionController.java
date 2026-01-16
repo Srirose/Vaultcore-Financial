@@ -26,34 +26,24 @@ public class TransactionController {
 
     // 🔁 MONEY TRANSFER API
     @PostMapping("/transfer")
-    public ResponseEntity<String> transfer(
-            @RequestBody TransferRequest request) {
-
-        // TEMP conversion: ACC1001 → 1001
-        Long senderId = Long.parseLong(
-                request.getFromAccount().replace("ACC", "")
-        );
-
-        Long receiverId = Long.parseLong(
-                request.getToAccount().replace("ACC", "")
-        );
+    public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
 
         transferService.transfer(
-                senderId,
-                receiverId,
+                request.getFromAccount(),
+                request.getToAccount(),
                 request.getAmount()
         );
 
-        return ResponseEntity.ok("Transaction successful");
+        return ResponseEntity.ok("Transfer successful");
     }
 
     // 📜 TRANSACTION HISTORY API
     @GetMapping("/history/{userId}")
     public ResponseEntity<List<LedgerEntry>> getTransactionHistory(
-            @PathVariable Long userId) {
+            @PathVariable String accountNumber) {
 
         List<LedgerEntry> history =
-                ledgerRepository.findTransactionHistory(userId);
+                ledgerRepository.findTransactionHistory(accountNumber);
 
         return ResponseEntity.ok(history);
     }

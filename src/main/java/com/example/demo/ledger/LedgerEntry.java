@@ -7,32 +7,29 @@ import java.time.LocalDateTime;
 @Table(name = "ledger_entries")
 public class LedgerEntry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	 @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Long id;
 
-    @Column(name = "transaction_id", nullable = false)
-    private String transactionId;
+	    private String transactionId;
+	    private String accountNumber;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+	    @Enumerated(EnumType.STRING)
+	    private EntryType entryType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "entry_type", nullable = false)
-    private EntryType entryType;
+	    private Double amount;
 
-    @Column(nullable = false)
-    private Double amount;
+	    @Column(name = "balance_after")
+	    private Double balanceAfter;
 
-    @Column(name = "balance_after", nullable = false)
-    private Double balanceAfter;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+	    private LocalDateTime createdAt = LocalDateTime.now();
 
     // getters & setters
-    public Long getId() { 
-        return id; 
+    public String getAccountNumber() { 
+        return accountNumber; 
+    }
+    public void setAccountNumber(String accountNumber) { 
+        this.accountNumber = accountNumber; 
     }
 
     public String getTransactionId() { 
@@ -41,14 +38,6 @@ public class LedgerEntry {
 
     public void setTransactionId(String transactionId) { 
         this.transactionId = transactionId; 
-    }
-
-    public Long getUserId() { 
-        return userId; 
-    }
-
-    public void setUserId(Long userId) { 
-        this.userId = userId; 
     }
 
     public EntryType getEntryType() { 

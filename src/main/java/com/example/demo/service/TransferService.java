@@ -20,45 +20,43 @@ public class TransferService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void transfer(Long senderId, Long receiverId, Double amount) {
+    public void transfer(String fromAcc, String toAcc, Double amount) {
 
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be positive");
         }
 
-        String transactionId = UUID.randomUUID().toString();
+        String txId = UUID.randomUUID().toString();
 
-        // 🔐 Sender balance
         double senderBalance = ledgerRepository
-                .findLastBalance(senderId)
+                .findLastBalance(fromAcc)
                 .orElse(0.0);
 
         if (senderBalance < amount) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        // ➖ DEBIT
+        // DEBIT
         LedgerEntry debit = new LedgerEntry();
-        debit.setTransactionId(transactionId);
-        debit.setUserId(senderId);
+        debit.setTransactionId(txId);
+        debit.setAccountNumber(fromAcc);
         debit.setEntryType(EntryType.DEBIT);
         debit.setAmount(amount);
         debit.setBalanceAfter(senderBalance - amount);
-
         ledgerRepository.save(debit);
 
-        // ➕ CREDIT
+        // CREDIT
         double receiverBalance = ledgerRepository
-                .findLastBalance(receiverId)
+                .findLastBalance(toAcc)
                 .orElse(0.0);
 
         LedgerEntry credit = new LedgerEntry();
-        credit.setTransactionId(transactionId);
-        credit.setUserId(receiverId);
+        credit.setTransactionId(txId);
+        credit.setAccountNumber(toAcc);
         credit.setEntryType(EntryType.CREDIT);
         credit.setAmount(amount);
         credit.setBalanceAfter(receiverBalance + amount);
-
         ledgerRepository.save(credit);
     }
+
 }

@@ -2,16 +2,16 @@ package com.example.demo.dto;
 
 public class BalanceResponse {
 
-    private Long userId;
+    private String accountNumber;
     private Double balance;
 
-    public BalanceResponse(Long userId, Double balance) {
-        this.userId = userId;
+    public BalanceResponse(String accountNumber, Double balance) {
+        this.accountNumber= accountNumber;
         this.balance = balance;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getaccountNumber() {
+        return accountNumber;
     }
 
     public Double getBalance() {

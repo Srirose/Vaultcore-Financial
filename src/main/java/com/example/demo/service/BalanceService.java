@@ -14,10 +14,10 @@ public class BalanceService {
         this.ledgerRepository = ledgerRepository;
     }
 
-    public Double getBalance(Long userId) {
+    public Double getBalance(String accountNumber) {
 
-        return ledgerRepository
-                .findLastBalance(userId)
-                .orElse(0.0);
+    	 return ledgerRepository
+                 .findLastBalance(accountNumber)
+                 .orElse(0.0);
     }
 }

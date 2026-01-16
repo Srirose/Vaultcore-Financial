@@ -15,15 +15,13 @@ public class BalanceController {
         this.ledgerRepository = ledgerRepository;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<BalanceResponse> getBalance(@PathVariable Long userId) {
+    @GetMapping("/{accountNumber}")
+    public ResponseEntity<BalanceResponse> getBalance(@PathVariable String accountNumber) {
 
         Double balance = ledgerRepository
-                .findLastBalance(userId)
+                .findLastBalance(accountNumber)
                 .orElse(0.0);
 
-        return ResponseEntity.ok(
-                new BalanceResponse(userId, balance)
-        );
+        return ResponseEntity.ok(new BalanceResponse(accountNumber, balance));
     }
 }
