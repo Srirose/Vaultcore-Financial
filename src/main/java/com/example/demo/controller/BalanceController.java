@@ -1,36 +1,29 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BalanceResponse;
+import com.example.demo.ledger.LedgerRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.demo.dto.BalanceResponse;
-import com.example.demo.service.BalanceService;
-
-import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/balance")
 public class BalanceController {
 
-    private final BalanceService balanceService;
+    private final LedgerRepository ledgerRepository;
 
-    public BalanceController(BalanceService balanceService) {
-        this.balanceService = balanceService;
+    public BalanceController(LedgerRepository ledgerRepository) {
+        this.ledgerRepository = ledgerRepository;
     }
 
-    @GetMapping(
-            value = "/{userId}",
-            produces = MediaType.APPLICATION_JSON_VALUE
-        )
-        public ResponseEntity<BalanceResponse> getBalance(
-                @PathVariable Long userId) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<BalanceResponse> getBalance(@PathVariable Long userId) {
 
-            Double balance = balanceService.getBalance(userId);
+        Double balance = ledgerRepository
+                .findLastBalance(userId)
+                .orElse(0.0);
 
-            return ResponseEntity.ok(
-                    new BalanceResponse(userId, balance)
-            );
-
+        return ResponseEntity.ok(
+                new BalanceResponse(userId, balance)
+        );
     }
 }
-
