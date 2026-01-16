@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,8 +11,12 @@ import com.example.demo.service.TransferService;
 import com.example.demo.ledger.LedgerEntry;
 import com.example.demo.ledger.LedgerRepository;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+
 @RestController
 @RequestMapping("/api/transactions")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TransactionController {
 
     private final TransferService transferService;
