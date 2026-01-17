@@ -12,10 +12,10 @@ import com.example.demo.ledger.LedgerEntry;
 import com.example.demo.ledger.LedgerRepository;
 
 @Service
+@Transactional
 public class TransferService {
 
     private final LedgerRepository ledgerRepository;
-
     public TransferService(LedgerRepository ledgerRepository) {
         this.ledgerRepository = ledgerRepository;
     }

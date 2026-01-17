@@ -9,16 +9,14 @@ import org.springframework.data.repository.query.Param;
 //hello
 public interface LedgerRepository extends JpaRepository<LedgerEntry, Long> {
 
-	 @Query("""
-		        SELECT le.balanceAfter
-		        FROM LedgerEntry le
-		        WHERE le.accountNumber = :accountNumber
-		        ORDER BY le.createdAt DESC
-		        LIMIT 1
-		    """)
-		    Optional<Double> findLastBalance(String accountNumber);
+	@Query("""
+		    SELECT le.balanceAfter
+		    FROM LedgerEntry le
+		    WHERE le.accountNumber = :accountNumber
+		    ORDER BY le.createdAt DESC
+		""")
+		Optional<Double> findLastBalance(@Param("accountNumber") String accountNumber);
 
-		    List<LedgerEntry> findByAccountNumberOrderByCreatedAtDesc(String accountNumber);
     // 🔹 Transaction history
     @Query("""
         SELECT le

@@ -1,31 +1,43 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+
 import com.example.demo.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.config.*;
 
-import java.util.Optional;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
+
+
+
 //hello
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder encoder;
 
-    public AuthController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthController(UserRepository repo, JwtUtil jwt, PasswordEncoder encoder) {
+        this.userRepository = repo;
+        this.jwtUtil = jwt;
+        this.encoder = encoder;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User loginUser) {
-        Optional<User> user =
-                userRepository.findByUsername(loginUser.getUsername());
+    public ResponseEntity<?> login(@RequestBody User loginUser) {
 
-        if (user.isPresent() &&
-            user.get().getPassword().equals(loginUser.getPassword())) {
-            return "Login Success";
+        User user = userRepository
+                .findByUsername(loginUser.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!encoder.matches(loginUser.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
-        return "Invalid Credentials";
+
+        String token = jwtUtil.generateToken(user.getUsername());
+        return ResponseEntity.ok(token);
     }
 }

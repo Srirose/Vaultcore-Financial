@@ -43,7 +43,7 @@ public class TransactionController {
     }
 
     // 📜 TRANSACTION HISTORY API
-    @GetMapping("/history/{userId}")
+    @GetMapping("/history/{accountNumber}")
     public ResponseEntity<List<LedgerEntry>> getTransactionHistory(
             @PathVariable String accountNumber) {
 
